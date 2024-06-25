@@ -9,26 +9,28 @@ Please cite the paper if you use the dataset :-)
 
 # What is included in the dataset?
 
+This dataset described the information on DLT jobs running in one of our production GPU clusters during two weeks in August 2023.
+This cluster consists of more than 800 hosts interconnected by a three-layer Clos network.
 
-This dataset contains all the DLT jobs (e.g., job ID, start time, end time, resource allocation, etc.) running in one of our in-production GPU clusters during two weeks in August 2023.
-This cluster includes more than 800 hosts interconnected by a three-layer Clos network.
+We blinded sensitive information such as user ID, cluster ID, and tenant ID for confidential reasons.
 
 The layout of the dataset:
 
-1. `job.csv`: Containing information about each job
+1. `job.csv`: Contains information about each job, including the job name, ID, type (e.g., PyTorch and TensorFlow),
+model (e.g., ResNet, GPT, and LLama), start time, end time, etc.
 
-2. `worker.csv`: Containing information about each worker of each job
+2. `worker.csv`: Contains information about each worker of each job, 
+including the associated host IP and resource usage (e.g., GPUs and CPUs), etc.
 
-3. `topo.csv`: Containing information about the network topology of the cluster
+3. `topo.csv`: Contains information about the network topology of the cluster.
+Each row in `topo.csv` corresponds to a host and specifies its location within the three-layer Clos network,
+i.e., which ASW (ToR switch), PSW (aggregation switch), and DSW (core switch) it is connected to.
 
-## Job information
+Based on above information,
+we can identify which jobs (and models) were running on which GPUs of which hosts at any given time,
+as well as the interconnections among these GPUs.
+By further assuming computation and communication workloads (since we do not know the specific hyperparameters of the running jobs),
+we can estimate the overall distribution of computation and communication on the cluster.
 
-Each row in `job.csv` corresponds to a job, containing information about the job name, ID, type (e.g., PyTorch and TensorFlow), start time, end time, etc.
 
-## Worker information
 
-Each row in `worker.csv` corresponds to a worker of a job, containing information about the associated job, type (master or worker), start time, end time, host IP, resource usage (e.g., GPUs and CPUs), etc.
-
-## Topology information
-
-Each row in `topo.csv` corresponds to a host, containing information about its location within the three-layer Clos network, i.e., which ASW (ToR switch), PSW (aggregation switch), and DSW (core switch) it is connected to.
